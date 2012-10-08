@@ -25,9 +25,11 @@ header="<background>\n
 content=""
 footer="\n</background>"
 
-#First pass in order to fill an array. This array allows to create the transition tag.
+#First pass in order to fill an array. This array allows to create the transition tag. 
+#I can not use something like files=($(ls *.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF} 2>/dev/null)) 
+#because I want that the user can define the directory and thus, it does not work.
 i=0
-for file in $directory/*.jpg $directory/*.jpeg $directory/*.png $directory/*.gif ; do
+for file in $(ls $directory | grep .png) $(ls $directory | grep .jpg) $(ls $directory | grep .jpeg) $(ls $directory | grep .gif); do
 	files[$i]=$file
 	let "i++"
 done
@@ -38,7 +40,7 @@ while [ $i -lt ${#files[@]} ]; do
 	content=$content"
 \t	<static>\n
 \t\t	<duration>$duration_img</duration>\n
-\t\t	<file>${files[$i]}</file>\n
+\t\t	<file>$directory/${files[$i]}</file>\n
 \t	</static>\n
 	"
 	# If there is a next image
@@ -46,8 +48,16 @@ while [ $i -lt ${#files[@]} ]; do
 		content=$content"
 \t	<transition>\n
 \t\t	<duration>$duration_trans</duration>\n
-\t\t	<from>${files[$i]}</from>\n
-\t\t	<to>${files[$j]}</to>\n
+\t\t	<from>$directory/${files[$i]}</from>\n
+\t\t	<to>$directory/${files[$j]}</to>\n
+\t	</transition>\n
+		"
+	else
+		content=$content"
+\t	<transition>\n
+\t\t	<duration>$duration_trans</duration>\n
+\t\t	<from>$directory/${files[$i]}</from>\n
+\t\t	<to>$directory/${files[0]}</to>\n
 \t	</transition>\n
 		"
 	fi
