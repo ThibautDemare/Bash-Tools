@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#Directory of source and destination
+SOURCEDIR=$1
+DIRDEST=$2
+
+#Extension of file
+SOURCEEXTENSION=$3
+DESTEXTENSION=$4
+
+#Loop over all image of the given extension in the given directory
+for FULLFILENAME in $SOURCEDIR*.$SOURCEEXTENSION
+do
+	#Extraction of the filename
+	FILENAME=$(basename "$FULLFILENAME" .$SOURCEEXTENSION)
+	#And the conversion
+	convert "$FULLFILENAME" "$DIRDEST$FILENAME.$DESTEXTENSION"
+done
